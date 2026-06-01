@@ -71,3 +71,13 @@ A production-grade Retrieval-Augmented Generation system that ingests PDFs, imag
     │   └── api/          # FastAPI routes and schemas
     ├── frontend/         # Streamlit UI
     └── data/
+
+## Architecture
+
+    User Query
+        ↓
+    FastAPI Backend
+        ├── Hybrid Retriever (FAISS + BM25)
+        │       └── PostgreSQL (chunk metadata)
+        └── Claude API (answer generation)
+                └── Grounded answer + citations
