@@ -4,6 +4,7 @@ from app.models import FileType
 from app.ingestion.pdf_ingester import ingest_pdf
 from app.ingestion.csv_ingester import ingest_csv
 from app.ingestion.code_ingester import ingest_code
+from app.ingestion.image_ingester import ingest_image
 from app.ingestion.embedder import EmbeddingManager
 from app.models import Chunk
 
@@ -18,6 +19,11 @@ EXTENSION_MAP = {
     ".go": FileType.CODE,
     ".rs": FileType.CODE,
     ".md": FileType.CODE,
+    ".png": FileType.IMAGE,
+    ".jpg": FileType.IMAGE,
+    ".jpeg": FileType.IMAGE,
+    ".tiff": FileType.IMAGE,
+    ".bmp": FileType.IMAGE,
 }
 
 def ingest_file(file_path: str, db: Session, embedder: EmbeddingManager):
@@ -40,6 +46,8 @@ def ingest_file(file_path: str, db: Session, embedder: EmbeddingManager):
         document = ingest_csv(file_path, db)
     elif file_type == FileType.CODE:
         document = ingest_code(file_path, db)
+    elif file_type == FileType.IMAGE:
+        document = ingest_image(file_path, db)
 
     # 2. Embed the new chunks into FAISS
     chunks = db.query(Chunk).filter(
