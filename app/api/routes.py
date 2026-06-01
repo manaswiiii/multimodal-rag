@@ -8,7 +8,7 @@ from app.database import get_db
 from app.models import Document, QueryHistory
 from app.ingestion.embedder import EmbeddingManager
 from app.ingestion.ingestor import ingest_file
-from app.retrieval.retriever import Retriever
+from app.retrieval.hybrid_retriever import HybridRetriever
 from app.generation.generator import generate_answer
 from app.api.schemas import QueryRequest, QueryResponse, DocumentResponse
 from app.config import settings
@@ -62,7 +62,7 @@ async def query_documents(
 ):
     """Query across all ingested documents."""
     embedder = get_embedder()
-    retriever = Retriever(db, embedder)
+    retriever = HybridRetriever(db, embedder)
 
     # Time the retrieval
     t0 = time.time()
