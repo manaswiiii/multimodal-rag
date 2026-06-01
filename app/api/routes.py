@@ -126,6 +126,48 @@ async def get_evaluation_report(db: Session = Depends(get_db)):
     evaluator = RAGEvaluator(db)
     return evaluator.full_report()
 
+@router.get("/history")
+async def get_query_history(
+    limit: int = 20,
+    db: Session = Depends(get_db)
+):
+    """Get recent query history."""
+    records = db.query(QueryHistory).order_by(
+        QueryHistory.created_at.desc()
+    ).limit(limit).all()
+
+    return [
+        {
+            "id": r.id,
+            "query": r.query_text,
+            "answer": r.answer_text,
+            "confidence": r.confidence_score,
+            "rating": r.rating,
+            "retrieval_latency_ms": r.retrieval_latency_ms,
+            "generation_latency_ms": r.generation_latency_ms,
+            "created_at": r.created_at.isoformat(),
+        }
+        for r in records
+    ]
+
+@router.post("/history/{query_id}/rate")
+async def rate_answer(
+    query_id: int,
+    rating: int,
+    db: Session = Depends(get_db)
+):
+    """Rate an answer 1-5 stars."""
+    if rating < 1 or rating > 5:
+        raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
+
+    record = db.query(QueryHistory).filter(QueryHistory.id == query_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Query not found")
+
+    record.rating = rating
+    db.commit()
+    return {"message": f"Query {query_id} rated {rating}/5"}
+
 @router.delete("/documents/{document_id}")
 async def delete_document(document_id: int, db: Session = Depends(get_db)):
     """Delete a document and all its chunks."""
