@@ -2,8 +2,6 @@
 
 A production-grade Retrieval-Augmented Generation system that ingests PDFs, images, CSVs, and code files, embeds them into a vector database, and answers questions with grounded citations.
 
-![Query Demo](screenshots/query.png)
-
 ## Features
 
 - **Multimodal Ingestion** — PDFs, images (OCR), CSVs, and code files
@@ -11,7 +9,6 @@ A production-grade Retrieval-Augmented Generation system that ingests PDFs, imag
 - **Grounded Answers** — Claude generates answers with source citations and confidence scores
 - **Evaluation Metrics** — ROUGE scores, retrieval latency, confidence distribution
 - **Query History** — tracks all queries with answer ratings
-- **Document Filters** — filter search by file type
 - **Streamlit UI** — upload files, query, and view metrics in a browser
 
 ## Tech Stack
@@ -28,42 +25,21 @@ A production-grade Retrieval-Augmented Generation system that ingests PDFs, imag
 | Frontend | Streamlit |
 | Containerization | Docker + Docker Compose |
 
-## ArchitectureUser Query
-│
-▼
-FastAPI Backend
-│
-├── Hybrid Retriever (FAISS + BM25)
-│       │
-│       └── PostgreSQL (chunk metadata)
-│
-└── Claude API (answer generation)
-│
-└── Grounded answer + citations## Setup
+## Setup
 
 ### Local
 
-```bash
-# Clone and setup
-git clone https://github.com/manaswiiii/multimodal-rag.git
-cd multimodal-rag
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-
-# Configure
-cp .env.example .env
-# Add your ANTHROPIC_API_KEY to .env
-
-# Start
-uvicorn app.main:app --reload --port 8000
-streamlit run frontend/app.py
-```
+    git clone https://github.com/manaswiiii/multimodal-rag.git
+    cd multimodal-rag
+    python3 -m venv venv && source venv/bin/activate
+    pip install -r requirements.txt
+    cp .env.example .env
+    uvicorn app.main:app --reload --port 8000
+    streamlit run frontend/app.py
 
 ### Docker
 
-```bash
-ANTHROPIC_API_KEY=your_key docker-compose up
-```
+    ANTHROPIC_API_KEY=your_key docker-compose up
 
 ## API Endpoints
 
@@ -77,17 +53,6 @@ ANTHROPIC_API_KEY=your_key docker-compose up
 | POST | /api/v1/history/{id}/rate | Rate an answer |
 | GET | /api/v1/evaluate | Evaluation metrics |
 
-## Screenshots
-
-### Query with Citations
-![Query](screenshots/query.png)
-
-### Document Library
-![Documents](screenshots/documents.png)
-
-### Evaluation Dashboard
-![Evaluation](screenshots/evaluation.png)
-
 ## Evaluation
 
 - **Retrieval latency:** ~100ms median
@@ -95,15 +60,14 @@ ANTHROPIC_API_KEY=your_key docker-compose up
 - **ROUGE-1:** ~0.39 on test queries
 - **Confidence:** mean 0.70 across queries
 
-## Project Structuremultimodal-rag/
-├── app/
-│   ├── ingestion/      # PDF, CSV, image, code ingesters + embedder
-│   ├── retrieval/      # Hybrid retriever (FAISS + BM25)
-│   ├── generation/     # LLM answer generation with citations
-│   ├── evaluation/     # ROUGE, latency, confidence metrics
-│   └── api/            # FastAPI routes and schemas
-├── frontend/           # Streamlit UI
-├── data/
-│   ├── uploads/        # Uploaded files
-│   └── processed/      # FAISS index
-└── tests/
+## Project Structure
+
+    multimodal-rag/
+    ├── app/
+    │   ├── ingestion/    # PDF, CSV, image, code ingesters + embedder
+    │   ├── retrieval/    # Hybrid retriever (FAISS + BM25)
+    │   ├── generation/   # LLM answer generation with citations
+    │   ├── evaluation/   # ROUGE, latency, confidence metrics
+    │   └── api/          # FastAPI routes and schemas
+    ├── frontend/         # Streamlit UI
+    └── data/
