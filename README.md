@@ -81,3 +81,10 @@ A production-grade Retrieval-Augmented Generation system that ingests PDFs, imag
         │       └── PostgreSQL (chunk metadata)
         └── Claude API (answer generation)
                 └── Grounded answer + citations
+
+## Screenshots
+
+![Query](screenshots/query.png)
+![Upload](screenshots/upload.png)
+![Documents](screenshots/documents.png)
+![Evaluation](screenshots/evaluation.png)
