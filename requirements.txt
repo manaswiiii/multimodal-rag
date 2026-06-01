@@ -1,0 +1,36 @@
+# API & Web
+fastapi==0.115.0
+uvicorn==0.30.6
+python-multipart==0.0.9
+streamlit==1.38.0
+
+# LLM & Embeddings
+anthropic==0.34.2
+langchain==0.3.0
+langchain-community==0.3.0
+sentence-transformers==3.1.1
+openai==1.45.0
+
+# Vector DB & Search
+faiss-cpu==1.9.0.post1
+
+# Document Parsing
+pypdf==4.3.1
+pytesseract==0.3.13
+Pillow==10.4.0
+pandas==2.2.3
+
+# Database
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.10
+alembic==1.13.2
+
+# Evaluation
+rouge-score==0.1.2
+
+# Utilities
+python-dotenv==1.0.1
+pydantic==2.8.2
+pydantic-settings==2.5.2
+numpy==1.26.4
+tqdm==4.66.5
