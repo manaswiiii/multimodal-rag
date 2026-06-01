@@ -12,6 +12,7 @@ from app.retrieval.hybrid_retriever import HybridRetriever
 from app.generation.generator import generate_answer
 from app.api.schemas import QueryRequest, QueryResponse, DocumentResponse
 from app.config import settings
+from app.evaluation.evaluator import RAGEvaluator
 
 router = APIRouter()
 
@@ -118,6 +119,12 @@ async def list_documents(db: Session = Depends(get_db)):
         )
         for doc in documents
     ]
+
+@router.get("/evaluate")
+async def get_evaluation_report(db: Session = Depends(get_db)):
+    """Get evaluation metrics for the RAG system."""
+    evaluator = RAGEvaluator(db)
+    return evaluator.full_report()
 
 @router.delete("/documents/{document_id}")
 async def delete_document(document_id: int, db: Session = Depends(get_db)):
